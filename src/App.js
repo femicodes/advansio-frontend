@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchComments } from './redux/actions/comment';
 import './App.css';
 
 function App() {
+  const dispatch = useDispatch();
+  const { comments } = useSelector(state => state.comments);
+  const commentData = !comments ? [] : comments;
+
+  useEffect(() => {
+    dispatch(fetchComments());
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h3>Commenter</h3>
+      {commentData.map((item) => {
+        return (
+          <ul key={item.id}>
+            <li>{item.body}</li>
+          </ul>
+        )
+      })}
     </div>
   );
 }
